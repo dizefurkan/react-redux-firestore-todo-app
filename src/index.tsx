@@ -1,12 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import { ThemeProvider } from "styled-components";
+
 import App from "./App";
+import theme from "./theme";
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <React.Suspense fallback={<div />}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </React.Suspense>
   </React.StrictMode>,
   document.getElementById("root")
 );

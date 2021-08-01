@@ -14,7 +14,7 @@ function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="signIn">
+        <Route path="/signIn">
           <SignIn />
         </Route>
         <Route>

@@ -60,7 +60,7 @@ function SignIn() {
 
   return (
     <S.Container>
-      <h1>Welcome to Qooper</h1>
+      <S.Title>Welcome to Qooper</S.Title>
       <p>The simple todo app</p>
       <br />
       <br />

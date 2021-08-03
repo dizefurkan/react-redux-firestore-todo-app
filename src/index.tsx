@@ -1,19 +1,25 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { ThemeProvider } from "styled-components";
+import { Provider } from "react-redux";
+
+import store from "./store";
 
 import App from "./App";
 import theme from "./theme";
 // import reportWebVitals from './reportWebVitals';
 import GlobalStyle from "./theme/style";
+import "src/theme/modern-normalize.css";
 
 ReactDOM.render(
   <React.StrictMode>
     <React.Suspense fallback={<div />}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <App />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <App />
+        </ThemeProvider>
+      </Provider>
     </React.Suspense>
   </React.StrictMode>,
   document.getElementById("root")

@@ -13,6 +13,9 @@ const theme = {
     lg: "18px",
     xl: "20px",
     "2xl": "24px",
+    "3xl": "28px",
+    "4xl": "32px",
+    "5xl": "36px",
   },
   input: {
     backgroundColor: "#fff",
@@ -21,6 +24,7 @@ const theme = {
   colors: {
     primary: "#fff",
     secondary: "#000",
+    gray: "#9CA3AF",
     border: "#FAFAFA",
   },
 };

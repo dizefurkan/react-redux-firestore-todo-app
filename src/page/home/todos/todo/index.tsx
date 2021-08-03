@@ -26,6 +26,8 @@ function TodoComponent(props: Props) {
     setTimeout(() => inputRef.current?.focus());
   };
   const onEditSave = () => {
+    if (!task || !task.trim()) return;
+
     props.onEdit({
       id: props.todo.id,
       task,

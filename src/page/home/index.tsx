@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 
 import { db } from "src/firebase";
 import { addTodo } from "src/reducer/todos";
+import { logout } from "src/reducer/auth";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 
 import Todos from "./todos";
@@ -54,7 +55,9 @@ function HomePage() {
 
   return (
     <>
-      <Header>logout</Header>
+      <Header>
+        <button onClick={() => dispatch(logout())}>logout</button>
+      </Header>
       <Container>
         <Input
           placeholder="Type a task"

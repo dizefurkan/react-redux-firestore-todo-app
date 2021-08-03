@@ -10,7 +10,9 @@ import Todos from "./todos";
 import Input from "src/component/input";
 import Header from "src/component/header";
 import Container from "src/component/container";
+import Dropdown from "src/component/dropdown";
 
+import LogoutIcon from "src/asset/svg/gr-logout";
 import * as S from "./style";
 
 function HomePage() {
@@ -52,11 +54,26 @@ function HomePage() {
     );
     setTask("");
   };
+  const userName = JSON.parse(localStorage.getItem("user") || "")?.userName;
 
   return (
     <>
       <Header>
-        <button onClick={() => dispatch(logout())}>logout</button>
+        <Dropdown
+          overlay={
+            <S.LogoutButton
+              style={{ width: "100%" }}
+              onClick={() => dispatch(logout())}
+            >
+              <S.LogoutIcon>
+                <LogoutIcon />
+              </S.LogoutIcon>
+              Logout
+            </S.LogoutButton>
+          }
+        >
+          <span>{userName}</span>
+        </Dropdown>
       </Header>
       <Container>
         <Input

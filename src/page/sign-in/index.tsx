@@ -8,11 +8,11 @@ import Row from "src/component/row";
 import Col from "src/component/col";
 
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
-
-import * as S from "./style";
-import { login, logout } from "src/reducer/auth";
+import { login } from "src/reducer/auth";
 import { auth } from "src/firebase";
 import { useHistory } from "react-router-dom";
+
+import * as S from "./style";
 
 function SignIn() {
   const [userName, setUserName] = React.useState("");
@@ -36,12 +36,16 @@ function SignIn() {
     };
 
   const onSubmit = React.useCallback(async () => {
-    console.log("Submited");
+    if (!userName || !firstName) return;
 
     try {
       setPending(true);
       const user = await auth.signInAnonymously();
       if (user.user) {
+        window.localStorage.setItem(
+          "user",
+          JSON.stringify({ userName, firstName, lastName })
+        );
         dispatch(login(user.user.uid));
       }
     } catch (error) {
@@ -49,7 +53,7 @@ function SignIn() {
     } finally {
       setPending(false);
     }
-  }, []);
+  }, [userName, firstName, lastName]);
 
   React.useEffect(() => {
     if (user) {
@@ -61,9 +65,7 @@ function SignIn() {
   return (
     <S.Container>
       <S.Title>Welcome to Qooper</S.Title>
-      <p>The simple todo app</p>
-      <br />
-      <br />
+      <S.Description>The simple todo app</S.Description>
       <Form onSubmit={onSubmit}>
         <Row>
           <Col span={24}>

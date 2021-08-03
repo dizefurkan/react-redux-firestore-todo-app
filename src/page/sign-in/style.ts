@@ -8,3 +8,7 @@ export const Container = styled(_Container)`
 export const Title = styled.h1`
   font-size: ${({ theme }) => theme.fontSize["5xl"]};
 `;
+
+export const Description = styled.p`
+  margin-bottom: 24px;
+`;

@@ -21,7 +21,10 @@ function TodoComponent(props: Props) {
   }, [props.todo]);
 
   const onEditClick = () => {
-    if (isEditing) return;
+    if (isEditing) {
+      setEditMode(false);
+      return;
+    }
 
     setTask(props.todo.task);
     setEditMode(true);
@@ -43,7 +46,7 @@ function TodoComponent(props: Props) {
 
   return (
     <S.Todo>
-      <div style={{ display: isEditing ? "block" : "none" }}>
+      <div style={{ flex: "1", display: isEditing ? "block" : "none" }}>
         <Input
           ref={inputRef}
           placeholder="Type a task"
@@ -55,12 +58,25 @@ function TodoComponent(props: Props) {
       </div>
       {!isEditing && props.todo.task}
       <S.ActionsWrapper>
-        <S.EditButton onClick={onEditClick}>
-          <S.EditIcon />
+        <S.EditButton
+          title={isEditing ? "Close without saving" : "Edit this task"}
+          onClick={onEditClick}
+        >
+          {isEditing ? <S.CloseIcon /> : <S.EditIcon />}
         </S.EditButton>
-        <S.CloseButton onClick={onDeleteClick}>
-          <S.CloseIcon />
-        </S.CloseButton>
+        {isEditing ? (
+          <S.SaveButton title="Save changes" onClick={onEditSave}>
+            <S.CheckIcon />
+          </S.SaveButton>
+        ) : (
+          <S.CloseButton
+            title="Delete this task?"
+            disabled={isEditing}
+            onClick={onDeleteClick}
+          >
+            <S.DeleteIcon />
+          </S.CloseButton>
+        )}
       </S.ActionsWrapper>
     </S.Todo>
   );

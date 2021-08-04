@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
-import { db } from "src/firebase";
+import { auth, db } from "src/firebase";
 import { setTodos } from "src/reducer/todos";
 import { logout } from "src/reducer/auth";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
@@ -90,7 +90,10 @@ function HomePage() {
           overlay={
             <S.LogoutButton
               style={{ width: "100%" }}
-              onClick={() => dispatch(logout())}
+              onClick={async () => {
+                await auth.signOut();
+                dispatch(logout());
+              }}
             >
               <S.LogoutIcon>
                 <LogoutIcon />

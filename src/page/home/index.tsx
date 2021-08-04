@@ -1,8 +1,9 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 import { db } from "src/firebase";
-import { addTodo } from "src/reducer/todos";
+import { setTodos } from "src/reducer/todos";
 import { logout } from "src/reducer/auth";
 import { useAppDispatch, useAppSelector } from "src/store/hooks";
 
@@ -18,10 +19,23 @@ import * as S from "./style";
 function HomePage() {
   const history = useHistory();
   const user = useAppSelector((state) => state.auth.user);
-  const todosLength = useAppSelector((state) => state.todos.todos.length);
+  const todos = useAppSelector((state) => state.todos.todos);
   const dispatch = useAppDispatch();
 
+  const [isPending, setPending] = React.useState(false);
+  const [isSavePending, setSavePending] = React.useState(false);
+  const [userName, setUserName] = React.useState<string | undefined>(undefined);
+  const todosLength = todos.length;
+
   const [task, setTask] = React.useState("");
+
+  React.useEffect(() => {
+    const userObjString = window.localStorage.getItem("user") || "";
+    if (!userObjString) return;
+
+    const _user = JSON.parse(userObjString);
+    if (_user.userName) setUserName(_user.userName);
+  }, []);
 
   React.useEffect(() => {
     if (!user) {
@@ -31,30 +45,42 @@ function HomePage() {
   }, [user]);
 
   React.useEffect(() => {
-    db.collection("todo-list")
-      .doc("SF")
-      .get()
-      .then((doc) => {
-        console.log("Current data: ", doc.data());
-      });
-    // .onSnapshot((doc) => {
-    //   console.log("Current data: ", doc.data());
-    // });
-  }, []);
+    if (!user) return;
 
-  const addTask = () => {
+    setPending(true);
+    db.collection("todo-list")
+      .doc(user)
+      .onSnapshot((doc) => {
+        const _tasks = doc.data()?.tasks;
+        if (!Array.isArray(_tasks)) {
+          setPending(false);
+          return;
+        }
+
+        dispatch(setTodos(_tasks));
+        setPending(false);
+      });
+  }, [user]);
+
+  const addTask = async () => {
+    if (!user) return;
+    if (isSavePending) return;
+
     const value = task.trim();
     if (!value) return;
+    if (!todos || !Array.isArray(todos)) return;
 
-    dispatch(
-      addTodo({
-        id: "" + new Date().getUTCMilliseconds(),
-        task,
-      })
-    );
-    setTask("");
+    const _newData = [...todos, { id: uuidv4(), task }];
+
+    setSavePending(true);
+    db.collection("todo-list")
+      .doc(user)
+      .set({ tasks: _newData })
+      .finally(() => {
+        setSavePending(false);
+        setTask("");
+      });
   };
-  const userName = JSON.parse(localStorage.getItem("user") || "")?.userName;
 
   return (
     <>
@@ -82,8 +108,15 @@ function HomePage() {
           onEnter={addTask}
           onChange={setTask}
         />
-        {!!todosLength && (
+        {isPending && <S.LoadingText>loading...</S.LoadingText>}
+        {!!todosLength && !isPending && (
           <S.TodosLengthText>{todosLength} task showing</S.TodosLengthText>
+        )}
+        {!!!todosLength && !isPending && (
+          <S.TodosEmptyText>
+            There is no todo item.
+            <br /> Let's add 🕺🏿
+          </S.TodosEmptyText>
         )}
       </Container>
       <Todos />

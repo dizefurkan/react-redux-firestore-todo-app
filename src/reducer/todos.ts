@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { db } from "src/firebase";
 
 export type Todo = {
   id: string;
@@ -17,25 +18,33 @@ export const todosSlice = createSlice({
   name: "todos",
   initialState,
   reducers: {
-    addTodo: (state, action: PayloadAction<Todo>) => {
-      state.todos = [...state.todos, action.payload];
+    setTodos: (state, action: PayloadAction<Todo[]>) => {
+      state.todos = action.payload;
     },
-    updateTodo: (state, action: PayloadAction<Todo>) => {
-      state.todos = state.todos.map((t) =>
-        t.id === action.payload.id
-          ? {
-              id: t.id,
-              task: action.payload.task,
-            }
-          : t
-      );
-    },
-    deleteTodo: (state, action: PayloadAction<string>) => {
-      state.todos = state.todos.filter((todo) => todo.id !== action.payload);
-    },
+
+    // TODO - MAY BE WE CAN MOVE THE API
+    // INSIDE THE ACTIONS OR REDUCERS OR SOMETHING
+    // LIKE THAT? BUT COMMENT FOR TEMPORARILY
+
+    // addTodo: (state, action: PayloadAction<Todo>) => {
+    //   state.todos = [...state.todos, action.payload];
+    // },
+    // updateTodo: (state, action: PayloadAction<Todo>) => {
+    //   state.todos = state.todos.map((t) =>
+    //     t.id === action.payload.id
+    //       ? {
+    //           id: t.id,
+    //           task: action.payload.task,
+    //         }
+    //       : t
+    //   );
+    // },
+    // deleteTodo: (state, action: PayloadAction<string>) => {
+    //   state.todos = state.todos.filter((todo) => todo.id !== action.payload);
+    // },
   },
 });
 
-export const { addTodo, updateTodo, deleteTodo } = todosSlice.actions;
+export const { setTodos } = todosSlice.actions;
 
 export default todosSlice.reducer;

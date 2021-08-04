@@ -2,6 +2,7 @@ import React from "react";
 import Input from "src/component/input";
 
 import { Todo } from "src/reducer/todos";
+
 import * as S from "./style";
 
 type Props = {
@@ -17,7 +18,8 @@ function TodoComponent(props: Props) {
 
   const onDeleteClick = React.useCallback(() => {
     props.onDelete(props.todo.id);
-  }, []);
+  }, [props.todo]);
+
   const onEditClick = () => {
     if (isEditing) return;
 
@@ -25,16 +27,15 @@ function TodoComponent(props: Props) {
     setEditMode(true);
     setTimeout(() => inputRef.current?.focus());
   };
+
   const onEditSave = () => {
     if (!task || !task.trim()) return;
 
-    props.onEdit({
-      id: props.todo.id,
-      task,
-    });
+    props.onEdit({ id: props.todo.id, task });
     setTask("");
     setEditMode(false);
   };
+
   const onCancel = () => {
     setTask("");
     setEditMode(false);

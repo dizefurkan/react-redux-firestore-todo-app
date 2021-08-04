@@ -1,11 +1,6 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  BrowserRouter,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
 import { app } from "./firebase";
 import { login } from "./reducer/auth";
 import { useAppDispatch } from "./store/hooks";
@@ -31,7 +26,7 @@ function App() {
 
   if (!isReady) return null;
   return (
-    <BrowserRouter>
+    <Router>
       <Switch>
         <Route path="/signIn">
           <SignIn />
@@ -40,7 +35,7 @@ function App() {
           <List />
         </Route>
       </Switch>
-    </BrowserRouter>
+    </Router>
   );
 }
 

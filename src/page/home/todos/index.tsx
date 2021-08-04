@@ -1,7 +1,8 @@
 import React from "react";
 
-import { useAppDispatch, useAppSelector } from "src/store/hooks";
-import { deleteTodo, Todo as TodoType, updateTodo } from "src/reducer/todos";
+import { db } from "src/firebase";
+import { useAppSelector } from "src/store/hooks";
+import { Todo as TodoType } from "src/reducer/todos";
 
 import Todo from "./todo";
 import Container from "src/component/container";
@@ -9,17 +10,23 @@ import Container from "src/component/container";
 import * as S from "./style";
 
 function Todos() {
-  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
   const todos = useAppSelector((state) => state.todos.todos);
 
   const onTodoDelete = (id: string) => {
-    dispatch(deleteTodo(id));
-  };
-  const onTodoEdit = (todo: TodoType) => {
-    dispatch(updateTodo(todo));
+    if (!user) return;
+    const _newData = todos.filter((todo) => todo.id !== id);
+    db.collection("todo-list").doc(user).set({ tasks: _newData });
   };
 
-  console.log(todos);
+  const onTodoEdit = (todo: TodoType) => {
+    if (!user) return;
+    const _newData = todos.map((t) =>
+      t.id === todo.id ? { id: t.id, task: todo.task } : t
+    );
+    db.collection("todo-list").doc(user).set({ tasks: _newData });
+  };
+
   return (
     <Container>
       <S.Todos>

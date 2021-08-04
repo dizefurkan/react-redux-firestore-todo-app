@@ -13,6 +13,7 @@ import Header from "src/component/header";
 import Container from "src/component/container";
 import Dropdown from "src/component/dropdown";
 
+import NoDataIcon from "src/asset/svg/empty";
 import LogoutIcon from "src/asset/svg/gr-logout";
 import * as S from "./style";
 
@@ -73,12 +74,12 @@ function HomePage() {
     const _newData = [...todos, { id: uuidv4(), task }];
 
     setSavePending(true);
+    setTask("");
     db.collection("todo-list")
       .doc(user)
       .set({ tasks: _newData })
       .finally(() => {
         setSavePending(false);
-        setTask("");
       });
   };
 
@@ -113,10 +114,12 @@ function HomePage() {
           <S.TodosLengthText>{todosLength} task showing</S.TodosLengthText>
         )}
         {!!!todosLength && !isPending && (
-          <S.TodosEmptyText>
-            There is no todo item.
-            <br /> Let's add 🕺🏿
-          </S.TodosEmptyText>
+          <>
+            <S.NoDataIconWrapper>
+              <NoDataIcon />
+            </S.NoDataIconWrapper>
+            <S.TodosEmptyText>Nothing to do</S.TodosEmptyText>
+          </>
         )}
       </Container>
       <Todos />

@@ -9,12 +9,18 @@ export const TodosLengthText = styled.p`
   text-align: right;
 `;
 
+export const NoDataIconWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+`;
+
 export const TodosEmptyText = styled.p`
+  color: ${({ theme }) => theme.colors.gray};
   font-size: ${({ theme }) => theme.fontSize["2xl"]};
   text-align: center;
   margin-top: 24px;
-  text-transform: uppercase;
-  font-weight: 700;
+  font-weight: 400;
 `;
 
 export const LogoutButton = styled.button`

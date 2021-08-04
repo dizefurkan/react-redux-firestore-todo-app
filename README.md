@@ -1,6 +1,15 @@
-# qooper-todo-app
+# Qooper - Todo App
 
 ![Qooper - Todo App](/screenshot/onboard.gif)
+
+#### How to start the server on local:
+
+`1- Clone the repository`
+`2- cd ./qooper-todo-app`
+`3- npm install`
+`4- npm run start`
+
+---
 
 1. Bootstrap React TypeScript with Creat React App
    npx create-react-app ./ --template typescript

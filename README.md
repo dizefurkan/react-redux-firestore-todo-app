@@ -1,6 +1,6 @@
-# Qooper - Todo App
+# Todo App
 
-![Qooper - Todo App](/screenshot/onboard.gif)
+![Todo App](/screenshot/onboard.gif)
 
 #### How to start the server on local:
 
